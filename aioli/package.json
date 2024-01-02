@@ -1,0 +1,59 @@
+{
+  "name": "aioli",
+  "version": "0.0.2",
+  "description": "vaul-like, radix-vue based bottomsheet/drawer component",
+  "keywords": [
+    "vue",
+    "drawer",
+    "bottom sheet",
+    "dialog",
+    "drawer",
+    "vaul"
+  ],
+  "author": "Maik Kowol<https://github.com/94726>",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./nuxt": {
+      "import": "./dist/nuxt.js",
+      "types": "./dist/nuxt.d.ts"
+    },
+    "./styles": {
+      "import": "./dist/styles.css"
+    },
+    "./dist/*": "./dist/*"
+  },
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit -p .",
+    "prepack": "cp ../README.md ./",
+    "postpack": "rm ./README.md"
+  },
+  "devDependencies": {
+    "@nuxt/schema": "~3.8.2",
+    "@vitejs/plugin-vue": "^5.0.2",
+    "@vueuse/core": "^10.7.1",
+    "radix-vue": "1.2.5",
+    "vite": "^5.0.10",
+    "vite-plugin-dts": "^3.7.0",
+    "vue": "^3.4.3"
+  },
+  "dependencies": {
+    "@nuxt/kit": "~3.8.2"
+  },
+  "peerDependencies": {
+    "radix-vue": "1.x",
+    "vue": "3.x"
+  }
+}
