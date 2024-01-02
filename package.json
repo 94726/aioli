@@ -1,0 +1,26 @@
+{
+  "name": "aioli-monorepo",
+  "private": true,
+  "packageManager": "pnpm@8.13.1",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter './website' dev",
+    "typecheck": "pnpm --filter '*' typecheck",
+    "lint": "npm run lint:files aioli website --",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:files": "eslint --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --max-warnings 0",
+    "build": "pnpm --filter './aioli' build",
+    "release": "pnpm --filter=aioli exec bumpp --no-commit --no-push --no-tag"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "@vue/eslint-config-typescript": "^12.0.0",
+    "bumpp": "^9.2.1",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.2",
+    "eslint-plugin-vue": "^9.19.2",
+    "prettier": "^3.1.1",
+    "vue-tsc": "^1.8.27"
+  }
+}

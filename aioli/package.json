@@ -1,6 +1,6 @@
 {
   "name": "aioli",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "vaul-like, radix-vue based bottomsheet/drawer component",
   "keywords": [
     "vue",

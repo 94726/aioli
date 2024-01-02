@@ -1,0 +1,39 @@
+[aioli-drawer] {
+  touch-action: none;
+  transform: translate3d(0, 100%, 0);
+  transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+[aioli-drawer][aioli-visible='true'] {
+  transform: translate3d(0, var(--snap-point-height, 0), 0);
+}
+
+[aioli-overlay] {
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.aioli-dragging .aioli-scrollable {
+  overflow-y: hidden !important;
+}
+
+[aioli-overlay][aioli-visible='true'] {
+  opacity: 1;
+}
+
+[aioli-drawer]::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  background: inherit;
+  background-color: inherit;
+  left: 0;
+  right: 0;
+  height: 200%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [aioli-drawer] {
+    user-select: none;
+  }
+}
