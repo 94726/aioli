@@ -2,6 +2,16 @@
   "name": "aioli",
   "version": "0.0.1",
   "description": "vaul-like, radix-vue based bottomsheet/drawer component",
+  "author": "Maik Kowol<maik.s.kowol@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/94726/aioli#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/94726/aioli"
+  },
+  "bugs": {
+    "url": "https://github.com/94726/aioli/issues"
+  },
   "keywords": [
     "vue",
     "drawer",
@@ -10,8 +20,6 @@
     "drawer",
     "vaul"
   ],
-  "author": "Maik Kowol<https://github.com/94726>",
-  "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
   "module": "./dist/index.js",

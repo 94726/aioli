@@ -10,6 +10,7 @@
     "lint:fix": "npm run lint -- --fix",
     "lint:files": "eslint --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --max-warnings 0",
     "build": "pnpm --filter './aioli' build",
+    "build:website": "pnpm --filter './website' generate",
     "release": "pnpm --filter=aioli exec bumpp --no-commit --no-push --no-tag"
   },
   "devDependencies": {
