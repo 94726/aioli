@@ -1,6 +1,6 @@
 {
   "name": "aioli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "vaul-like, radix-vue based bottomsheet/drawer component",
   "author": "Maik Kowol<maik.s.kowol@gmail.com>",
   "license": "MIT",
