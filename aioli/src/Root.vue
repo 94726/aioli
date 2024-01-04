@@ -17,7 +17,7 @@ import { useEventListener, useVModel } from '@vueuse/core'
 import { DialogRoot, type DialogRootProps } from 'radix-vue'
 import { nextTick, onMounted, ref, toRefs, watch } from 'vue'
 import { provideDrawerContext } from './context'
-import { dampenValue, getTranslateY, set, isInput } from './helpers'
+import { dampenValue, getTranslateY, isInput, set } from './helpers'
 
 const VELOCITY_THRESHOLD = 0.4
 
@@ -221,7 +221,7 @@ function resetDrawerStyles() {
   })
 }
 
-function shouldDrag(el: EventTarget, isDraggingDown: boolean) {
+function shouldDrag(el: EventTarget, isDraggingUp: boolean) {
   let element = el as HTMLElement
   const date = new Date()
   const highlightedText = window.getSelection()?.toString()
@@ -229,7 +229,6 @@ function shouldDrag(el: EventTarget, isDraggingDown: boolean) {
   if (swipeAmount > 0) {
     return true
   }
-
   // todo this part is bit annoying
   // Don't drag if there's highlighted text
   if (highlightedText && highlightedText.length > 0) {
@@ -246,24 +245,16 @@ function shouldDrag(el: EventTarget, isDraggingDown: boolean) {
     return false
   }
 
-  if (isDraggingDown) {
-    lastTimeDragPrevented = date
-    // We are dragging down so we should allow scrolling
-    return false
-  }
-
   // Keep climbing up the DOM tree as long as there's a parent
   while (element) {
     // Check if the element is scrollable
     if (element.scrollHeight > element.clientHeight) {
-      // if (element.getAttribute('role') === 'dialog') {
-      //   return true
-      // }
-
-      // if (isDraggingDown && element !== document.body && !swipeAmount && swipeAmount >= 0) {
-      //   lastTimeDragPrevented = new Date()
-      //   return false // Element is scrolled to the top, but we are dragging down so we should allow scrolling
-      // }
+      // user is trying to scroll down
+      if (isDraggingUp && ['scroll', 'auto'].includes(getComputedStyle(element).overflowY)) {
+        lastTimeDragPrevented = date
+        // We are dragging down so we should allow scrolling
+        return false
+      }
       if (element.scrollTop !== 0) {
         lastTimeDragPrevented = new Date()
         return false // The element is scrollable and not scrolled to the top, so don't drag
@@ -315,10 +306,10 @@ function onDrag(event: PointerEvent) {
     const y = getScreenY(event)
 
     const draggedDistance = pointerStartY.value - y - dragStartY
-    const isDraggingDown = draggedDistance > 0
+    const isDraggingUp = draggedDistance > 0
 
     if (!draggedDistance) return // not dragging yet
-    if (!isAllowedToDrag.value && !shouldDrag(event.target!, isDraggingDown)) return
+    if (!isAllowedToDrag.value && !shouldDrag(event.target!, isDraggingUp)) return
 
     drawerRef.value?.classList.add(DRAG_CLASS)
     // If shouldDrag gave true once after pressing down on the drawer, we set isAllowedToDrag to true and it will remain true until we let go, there's no reason to disable dragging mid way, ever, and that's the solution to it
