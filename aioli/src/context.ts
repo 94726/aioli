@@ -10,7 +10,6 @@ interface DrawerContextValue {
   openProp: Ref<boolean>
   keyboardIsOpen: Ref<boolean>
   modal: Ref<Readonly<boolean>>
-  shouldFade: Ref<Readonly<boolean>>
   visible: Ref<boolean>
   allowMouseDrag: Ref<boolean>
 }

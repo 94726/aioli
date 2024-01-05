@@ -18,7 +18,7 @@
 }
 
 [aioli-overlay][aioli-visible='true'] {
-  opacity: 1;
+  opacity: var(--drag-percent, 1);
 }
 
 [aioli-drawer]::after {

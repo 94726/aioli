@@ -51,7 +51,6 @@ const props = withDefaults(defineProps<DialogProps>(), {
 
 const emit = defineEmits<{
   (e: 'update:open', value: boolean): void
-  (e: 'drag', percentageDragged: number): void
   (e: 'release', event: PointerEvent, open: boolean): void
   (e: 'close'): void
 }>()
@@ -79,8 +78,6 @@ const drawerRef = ref<HTMLDivElement>()
 const drawerHeightRef = ref(0)
 const initialDrawerHeight = ref(0)
 
-const shouldFade = ref(true)
-
 provideDrawerContext({
   visible,
   drawerRef,
@@ -90,7 +87,6 @@ provideDrawerContext({
   onDrag,
   persistent,
   openProp,
-  shouldFade,
   keyboardIsOpen,
   modal,
   allowMouseDrag,
@@ -218,6 +214,7 @@ function resetDrawerStyles() {
 
   set(overlayRef.value, {
     transition: '',
+    '--drag-percent': '',
   })
 }
 
@@ -312,6 +309,7 @@ function onDrag(event: PointerEvent) {
     if (!isAllowedToDrag.value && !shouldDrag(event.target!, isDraggingUp)) return
 
     drawerRef.value?.classList.add(DRAG_CLASS)
+    overlayRef.value?.classList.add(DRAG_CLASS)
     // If shouldDrag gave true once after pressing down on the drawer, we set isAllowedToDrag to true and it will remain true until we let go, there's no reason to disable dragging mid way, ever, and that's the solution to it
     isAllowedToDrag.value = true
 
@@ -336,11 +334,19 @@ function onDrag(event: PointerEvent) {
     // We need to capture last time when drag with scroll was triggered and have a timeout between
     const absDraggedDistance = Math.abs(draggedDistance)
 
-    // const percentageDragged = absDraggedDistance / drawerHeightRef.value
+    const dragPercent = absDraggedDistance / drawerHeightRef.value
 
     set(drawerRef.value, {
       transform: `translate3d(0, ${absDraggedDistance}px, 0)`,
     })
+
+    set(
+      overlayRef.value,
+      {
+        '--drag-percent': `${1 - dragPercent}`,
+      },
+      true,
+    )
   }
 }
 
@@ -349,13 +355,15 @@ function onRelease(event: PointerEvent) {
   const swipeAmount = getTranslateY(drawerRef.value)
 
   resetDrawerStyles()
+  drawerRef.value?.classList.remove(DRAG_CLASS)
+  overlayRef.value?.classList.remove(DRAG_CLASS)
+
   if (!isDragging.value) return
   if (isAllowedToDrag.value && isInput(event.target as HTMLElement)) {
     // If we were just dragging, prevent focusing on inputs etc. on release
     ;(event.target as HTMLInputElement).blur()
   }
 
-  drawerRef.value?.classList.remove(DRAG_CLASS)
   isAllowedToDrag.value = false
   isDragging.value = false
   dragEndTime.value = new Date()
