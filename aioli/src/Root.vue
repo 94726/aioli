@@ -123,18 +123,13 @@ onMounted(() => {
           })
 
           if (cancellableClosing.value) {
-            stopTransitioncancelListener = useEventListener(
-              drawerRef,
-              'transitioncancel',
-              (e: Event) => {
-                if (e.target != e.currentTarget) return
-                stopTransitioncancelListener?.()
-                stopTransitionendListener?.()
-                visible.value = true
-                openProp.value = true
-              },
-              { once: true },
-            )
+            stopTransitioncancelListener = useEventListener(drawerRef, 'transitioncancel', (e: Event) => {
+              if (e.target != e.currentTarget) return
+              visible.value = true
+              openProp.value = true
+              stopTransitioncancelListener?.()
+              stopTransitionendListener?.()
+            })
           }
         })
       }
