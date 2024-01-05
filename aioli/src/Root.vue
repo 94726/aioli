@@ -187,10 +187,8 @@ useEventListener(window.visualViewport, 'resize', function onVisualViewportChang
       drawerRef.value.style.height = `${initialDrawerHeight.value}px`
     }
 
-    if (keyboardIsOpen.value) {
-      // Negative bottom value would never make sense
-      drawerRef.value.style.bottom = `${Math.max(diffFromInitial, 0)}px`
-    }
+    // Negative bottom value would never make sense
+    drawerRef.value.style.bottom = `${Math.max(diffFromInitial, 0)}px`
   }
 })
 
@@ -281,13 +279,15 @@ function onPress(event: PointerEvent) {
   onDrag(event) // transition cancelling shouldn't require mouse movement
 }
 
-function getScreenY(event: PointerEvent) {
-  let y = event.screenY
-  if (event instanceof TouchEvent) {
+function getScreenY(event: PointerEvent | TouchEvent) {
+  let y = 0
+  if ('touches' in event) {
     y = event.touches[0]?.screenY
     if (y === undefined) {
       y = event.changedTouches[0].screenY
     }
+  } else {
+    y = event.screenY
   }
   return y
 }
