@@ -264,6 +264,7 @@ function shouldDrag(el: EventTarget, isDraggingUp: boolean) {
 
 let dragStartY = 0
 function onPress(event: PointerEvent) {
+  if (!allowMouseDrag.value && event.pointerType === 'mouse') return
   if (!cancellableClosing.value && !openProp.value) return // Don't allow dragging if the drawer is closed and cancellableClosing is false
   if (persistent.value || isDragging.value) return
   if (drawerRef.value && !drawerRef.value.contains(event.target as Node)) return
@@ -273,29 +274,17 @@ function onPress(event: PointerEvent) {
 
   // Ensure we maintain correct pointer capture even when going outside of the drawer
   ;(event.target as HTMLElement).setPointerCapture(event.pointerId)
-  pointerStartY.value = getScreenY(event)
+  pointerStartY.value = event.screenY
   dragStartY = getTranslateY(drawerRef.value!) ?? 0 // get current translate e.g. intercepting a close animation
   resetDrawerStyles()
   onDrag(event) // transition cancelling shouldn't require mouse movement
 }
 
-function getScreenY(event: PointerEvent | TouchEvent) {
-  let y = 0
-  if ('touches' in event) {
-    y = event.touches[0]?.screenY
-    if (y === undefined) {
-      y = event.changedTouches[0].screenY
-    }
-  } else {
-    y = event.screenY
-  }
-  return y
-}
-
 function onDrag(event: PointerEvent) {
+  if (!allowMouseDrag.value && event.pointerType === 'mouse') return
   // We need to know how much of the drawer has been dragged in percentages so that we can transform background accordingly
   if (isDragging.value) {
-    const y = getScreenY(event)
+    const y = event.screenY
 
     const draggedDistance = pointerStartY.value - y - dragStartY
     const isDraggingUp = draggedDistance > 0
@@ -346,6 +335,7 @@ function onDrag(event: PointerEvent) {
 }
 
 function onRelease(event: PointerEvent) {
+  if (!allowMouseDrag.value && event.pointerType === 'mouse') return
   if (!drawerRef.value) return
   const swipeAmount = getTranslateY(drawerRef.value)
 
@@ -368,7 +358,7 @@ function onRelease(event: PointerEvent) {
   if (dragStartTime.value === null) return
 
   const timeTaken = dragEndTime.value.getTime() - dragStartTime.value.getTime()
-  const distMoved = pointerStartY.value - getScreenY(event)
+  const distMoved = pointerStartY.value - event.screenY
   const velocity = Math.abs(distMoved) / timeTaken
   const visibleDrawerHeight = Math.min(drawerRef.value.getBoundingClientRect().height ?? 0, window.innerHeight)
 

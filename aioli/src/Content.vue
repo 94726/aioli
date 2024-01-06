@@ -29,10 +29,9 @@
       }
     "
     @interact-outside="emit('interactOutside', $event)"
-    v-on="maybeMouseEvents"
-    @touchstart.passive="onPress"
-    @touchmove.passive="onDrag"
-    @touchend.passive="onRelease"
+    @pointerdown.passive="onPress"
+    @pointermove.passive="onDrag"
+    @pointerup.passive="onRelease"
   >
     <slot />
   </DialogContent>
@@ -40,13 +39,13 @@
 
 <script setup lang="ts">
 import { DialogContent, type DialogContentProps, type DialogContentEmits } from 'radix-vue'
-import { ref, watch, type ComponentPublicInstance, nextTick, computed } from 'vue'
+import { ref, watch, type ComponentPublicInstance, nextTick } from 'vue'
 import { useDrawerContext } from './context'
 
 const props = defineProps<DialogContentProps>()
 const emit = defineEmits<DialogContentEmits>()
 
-const { drawerRef, onPress, onRelease, onDrag, persistent, keyboardIsOpen, visible, openProp, modal, allowMouseDrag } =
+const { drawerRef, onPress, onRelease, onDrag, persistent, keyboardIsOpen, visible, openProp, modal } =
   useDrawerContext()!
 
 const contentNode = ref<ComponentPublicInstance>()
@@ -60,14 +59,4 @@ watch(
   },
   { immediate: true },
 )
-
-const maybeMouseEvents = computed(() => {
-  if (!allowMouseDrag.value) return {}
-
-  return {
-    pointerdown: onPress,
-    pointermove: onDrag,
-    pointerup: onRelease,
-  }
-})
 </script>

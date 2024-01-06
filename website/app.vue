@@ -39,7 +39,7 @@
           <ADialogContent
             class="fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[10px] bottom-0 left-0 right-0 h-full max-h-[93%] mx-[-1px]"
           >
-            <div class="p-4 bg-white rounded-t-[10px] flex-1 overflow-y-auto">
+            <div class="p-4 bg-white rounded-t-[10px] flex-1">
               <div class="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
               <div class="max-w-md mx-auto">
                 <h2 class="font-medium mb-4">Drawer for Vue.</h2>
