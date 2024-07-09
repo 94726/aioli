@@ -104,6 +104,8 @@ onMounted(() => {
         visible.value = false
         if (!drawerRef.value) return
 
+        closeAndReset()
+
         const hasTransition = getComputedStyle(drawerRef.value).transition != 'all 0s ease 0s'
 
         if (!hasTransition) {
@@ -268,6 +270,7 @@ function onPress(event: PointerEvent) {
   if (!cancellableClosing.value && !openProp.value) return // Don't allow dragging if the drawer is closed and cancellableClosing is false
   if (persistent.value || isDragging.value) return
   if (drawerRef.value && !drawerRef.value.contains(event.target as Node)) return
+  if ((event.target as HTMLElement)?.draggable) return
   drawerHeightRef.value = drawerRef.value?.getBoundingClientRect().height || 0
   isDragging.value = true
   dragStartTime.value = new Date()
@@ -339,25 +342,17 @@ function onRelease(event: PointerEvent) {
   if (!drawerRef.value) return
   const swipeAmount = getTranslateY(drawerRef.value)
 
-  resetDrawerStyles()
-  drawerRef.value?.classList.remove(DRAG_CLASS)
-  overlayRef.value?.classList.remove(DRAG_CLASS)
-
-  if (!isDragging.value) return
-  if (isAllowedToDrag.value && isInput(event.target as HTMLElement)) {
+  if (isAllowedToDrag.value && isInput(event.target)) {
     // If we were just dragging, prevent focusing on inputs etc. on release
-    ;(event.target as HTMLInputElement).blur()
+    event.target.blur()
   }
-
-  isAllowedToDrag.value = false
-  isDragging.value = false
-  dragEndTime.value = new Date()
+  closeAndReset()
 
   if (!shouldDrag(event.target!, false) || !swipeAmount || Number.isNaN(swipeAmount)) return
 
   if (dragStartTime.value === null) return
 
-  const timeTaken = dragEndTime.value.getTime() - dragStartTime.value.getTime()
+  const timeTaken = dragEndTime.value!.getTime() - dragStartTime.value.getTime()
   const distMoved = pointerStartY.value - event.screenY
   const velocity = Math.abs(distMoved) / timeTaken
   const visibleDrawerHeight = Math.min(drawerRef.value.getBoundingClientRect().height ?? 0, window.innerHeight)
@@ -381,5 +376,15 @@ function onRelease(event: PointerEvent) {
   }
 
   emit('release', event, openProp.value)
+}
+
+function closeAndReset() {
+  resetDrawerStyles()
+  drawerRef.value?.classList.remove(DRAG_CLASS)
+  overlayRef.value?.classList.remove(DRAG_CLASS)
+
+  isAllowedToDrag.value = false
+  isDragging.value = false
+  dragEndTime.value = new Date()
 }
 </script>

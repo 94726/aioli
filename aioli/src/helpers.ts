@@ -72,7 +72,7 @@ export function dampenValue(v: number) {
 }
 
 const nonTextInputTypes = new Set(['checkbox', 'radio', 'range', 'color', 'file', 'image', 'button', 'submit', 'reset'])
-export function isInput(target: Element) {
+export function isInput(target: Element | EventTarget | null): target is HTMLInputElement | HTMLTextAreaElement {
   return (
     (target instanceof HTMLInputElement && !nonTextInputTypes.has(target.type)) ||
     target instanceof HTMLTextAreaElement ||
