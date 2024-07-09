@@ -264,11 +264,20 @@ function shouldDrag(el: EventTarget, isDraggingUp: boolean) {
   return true
 }
 
+// makes sure that pointermove isn't cancelled mid drag
+useEventListener(
+  'touchmove',
+  (event) => {
+    if (modal.value && isAllowedToDrag.value) event.preventDefault()
+  },
+  { passive: false },
+)
+
 let dragStartY = 0
 function onPress(event: PointerEvent) {
   if (!allowMouseDrag.value && event.pointerType === 'mouse') return
   if (!cancellableClosing.value && !openProp.value) return // Don't allow dragging if the drawer is closed and cancellableClosing is false
-  if (persistent.value || isDragging.value) return
+  if (persistent.value) return
   if (drawerRef.value && !drawerRef.value.contains(event.target as Node)) return
   if ((event.target as HTMLElement)?.draggable) return
   drawerHeightRef.value = drawerRef.value?.getBoundingClientRect().height || 0
