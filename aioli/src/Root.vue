@@ -51,6 +51,7 @@ const props = withDefaults(defineProps<DialogProps>(), {
 
 const emit = defineEmits<{
   (e: 'update:open', value: boolean): void
+  (e: 'drag', event: PointerEvent, dragPercent: number): void
   (e: 'release', event: PointerEvent, open: boolean): void
   (e: 'close'): void
 }>()
@@ -343,6 +344,7 @@ function onDrag(event: PointerEvent) {
       },
       true,
     )
+    emit('drag', event, dragPercent)
   }
 }
 
