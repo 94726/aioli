@@ -4,7 +4,7 @@
     :modal="modal"
     @update:open="
       (open) => {
-        openProp = open
+        openProp = open || persistent
       }
     "
   >
