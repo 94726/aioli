@@ -49,16 +49,16 @@
     "postpack": "rm ./README.md"
   },
   "devDependencies": {
-    "@nuxt/schema": "~3.8.2",
-    "@vitejs/plugin-vue": "^5.0.2",
-    "@vueuse/core": "^10.7.1",
-    "radix-vue": "1.2.5",
-    "vite": "^5.0.10",
-    "vite-plugin-dts": "^3.7.0",
-    "vue": "^3.4.3"
+    "@nuxt/schema": "~3.12.4",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "@vueuse/core": "^10.11.0",
+    "radix-vue": "1.9.2",
+    "vite": "^5.3.5",
+    "vite-plugin-dts": "^3.9.1",
+    "vue": "^3.4.35"
   },
   "dependencies": {
-    "@nuxt/kit": "~3.8.2"
+    "@nuxt/kit": "~3.12.4"
   },
   "peerDependencies": {
     "radix-vue": "1.x",
