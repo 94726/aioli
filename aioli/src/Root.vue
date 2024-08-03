@@ -212,6 +212,8 @@ function resetDrawerStyles() {
     transition: '',
     '--drag-percent': '',
   })
+  drawerRef.value?.classList.remove(DRAG_CLASS)
+  overlayRef.value?.classList.remove(DRAG_CLASS)
 }
 
 function shouldDrag(el: EventTarget, isDraggingUp: boolean) {
@@ -219,7 +221,7 @@ function shouldDrag(el: EventTarget, isDraggingUp: boolean) {
   const date = new Date()
   const highlightedText = window.getSelection()?.toString()
   const swipeAmount = (drawerRef.value ? getTranslateY(drawerRef.value) : null) ?? 0
-  if (swipeAmount > 0) {
+  if (swipeAmount > 5) {
     return true
   }
   // todo this part is bit annoying
@@ -277,8 +279,7 @@ useEventListener(
 let dragStartY = 0
 function onPress(event: PointerEvent) {
   if (!allowMouseDrag.value && event.pointerType === 'mouse') return
-  if (!cancellableClosing.value && !openProp.value) return // Don't allow dragging if the drawer is closed and cancellableClosing is false
-  if (persistent.value) return
+  if ((!cancellableClosing.value || persistent.value) && !openProp.value) return // Don't allow dragging if the drawer is closed and cancellableClosing is false
   if (drawerRef.value && !drawerRef.value.contains(event.target as Node)) return
   if ((event.target as HTMLElement)?.draggable) return
   drawerHeightRef.value = drawerRef.value?.getBoundingClientRect().height || 0
@@ -300,9 +301,9 @@ function onDrag(event: PointerEvent) {
     const y = event.screenY
 
     const draggedDistance = pointerStartY.value - y - dragStartY
-    const isDraggingUp = draggedDistance > 0
+    const isDraggingUp = pointerStartY.value - y > 0 // don't use draggedDistance as it contains the dragStartY
 
-    if (!draggedDistance) return // not dragging yet
+    if (Math.abs(draggedDistance) <= 5) return // not dragging yet
     if (!isAllowedToDrag.value && !shouldDrag(event.target!, isDraggingUp)) return
 
     drawerRef.value?.classList.add(DRAG_CLASS)
@@ -324,6 +325,12 @@ function onDrag(event: PointerEvent) {
       const dampenedDraggedDistance = dampenValue(draggedDistance)
       set(drawerRef.value, {
         transform: `translate3d(0, ${Math.min(dampenedDraggedDistance * -1, 0)}px, 0)`,
+      })
+      return
+    } else if (persistent.value) {
+      const dampenedDraggedDistance = dampenValue(draggedDistance)
+      set(drawerRef.value, {
+        transform: `translate3d(0, ${Math.max(dampenedDraggedDistance * -1, 0)}px, 0)`,
       })
       return
     }
@@ -358,6 +365,7 @@ function onRelease(event: PointerEvent) {
     event.target.blur()
   }
   closeAndReset()
+  if (persistent.value) return
 
   if (!shouldDrag(event.target!, false) || !swipeAmount || Number.isNaN(swipeAmount)) return
 
@@ -391,8 +399,6 @@ function onRelease(event: PointerEvent) {
 
 function closeAndReset() {
   resetDrawerStyles()
-  drawerRef.value?.classList.remove(DRAG_CLASS)
-  overlayRef.value?.classList.remove(DRAG_CLASS)
 
   isAllowedToDrag.value = false
   isDragging.value = false

@@ -5,11 +5,11 @@ This is a drawer/bottom-sheet library based on [radix-vue](https://github.com/ra
 ## Installation
 
 ```bash
-pnpm add aioli
+pnpm add aioli radix-vue
 
-npm install aioli
+npm install aioli radix-vue
 
-yarn add aioli
+yarn add aioli radix-vue
 ```
 
 ## Usage

@@ -52,7 +52,7 @@
     "@nuxt/schema": "~3.12.4",
     "@vitejs/plugin-vue": "^5.1.2",
     "@vueuse/core": "^10.11.0",
-    "radix-vue": "1.9.2",
+    "radix-vue": "^1.9.2",
     "vite": "^5.3.5",
     "vite-plugin-dts": "^3.9.1",
     "vue": "^3.4.35"

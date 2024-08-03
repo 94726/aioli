@@ -68,7 +68,7 @@ export function getTranslateY(element: HTMLElement): number | null {
 }
 
 export function dampenValue(v: number) {
-  return 8 * (Math.log(v + 1) - 2)
+  return Math.sign(v) * 8 * (Math.log(Math.abs(v) + 1) - 2)
 }
 
 const nonTextInputTypes = new Set(['checkbox', 'radio', 'range', 'color', 'file', 'image', 'button', 'submit', 'reset'])

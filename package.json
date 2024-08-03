@@ -22,6 +22,7 @@
     "eslint-plugin-prettier": "^5.1.2",
     "eslint-plugin-vue": "^9.19.2",
     "prettier": "^3.1.1",
+    "typescript": "^5.5.4",
     "vue-tsc": "^2.0.29"
   }
 }
