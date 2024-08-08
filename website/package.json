@@ -10,10 +10,14 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.8.2",
     "aioli": "workspace:*"
   },
   "devDependencies": {
+    "@iconify-json/uil": "^1.1.9",
+    "@iconify-json/pepicons": "^1.1.13",
     "@nuxt/devtools": "latest",
+    "@nuxt/icon": "^1.4.5",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "nuxt": "^3.12.4"
   }
