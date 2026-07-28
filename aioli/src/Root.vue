@@ -56,6 +56,15 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
+defineExpose({
+  open: () => {
+    openProp.value = true
+  },
+  close: () => {
+    openProp.value = false
+  },
+})
+
 const { closeThreshold, scrollLockTimeout, persistent, fixed, modal, cancellableClosing, allowMouseDrag } =
   toRefs(props)
 
